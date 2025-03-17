@@ -1,22 +1,38 @@
 # Opensource_RTL2GDS
-# Silicon Craft VLSI EDA Tools
+# Silicon Craft VLSI Opensource EDA Tools installation setup
 
-## Overview
-This repository provides an automated installation script for open-source EDA tools required for VLSI design and verification. The tools are set up to run on:
-- **Linux (Ubuntu)**
-- **WSL (Ubuntu on Windows)**
-- **MacOS**
 
-## Features
-- Automatically detects the OS and installs the required dependencies.
-- Installs open-source EDA tools including Yosys, OpenROAD, Magic, Netgen, Ngspice, OpenTimer, OpenSTA, Icarus Verilog, SPEF Extractor, CVC, OR-Tools, and CUDD.
-- Configures environment settings for seamless usage.
+## Introduction  
+Openlane RTL2GDS is an **open-source, fully automated RTL-to-GDSII flow**, built using industry-standard EDA tools. This flow supports Linux, Windows (via WSL), and macOS, making it accessible for VLSI engineers, researchers, and students.
 
-## Installation
-### **Step 1: Clone the Repository**
-```
- git clone https://github.com/your_username/Silicon_Craft_VLSI_EDA.git
- cd Silicon_Craft_VLSI_EDA
+## 📌 **Features**
+✔ End-to-end **RTL-to-GDSII** flow  
+✔ **Fully open-source** toolchain  
+✔ **Multi-OS Support:** Ubuntu, WSL, and macOS  
+✔ Integrated **synthesis, floorplanning, placement, routing, and verification**  
+✔ Minimal dependencies, simple installation  
+
+## 🔧 **Tools Used in the Flow**
+| Stage              | Tool                 |
+|-------------------|----------------------|
+| **Synthesis**     | Yosys                 |
+| **Floorplanning** | OpenROAD              |
+| **Placement**     | OpenROAD              |
+| **Routing**       | OpenROAD              |
+| **DRC/LVS Check** | Magic, Netgen         |
+| **Timing Analysis** | OpenSTA, OpenTimer   |
+| **SPICE Simulations** | Ngspice             |
+| **Logic Simulation** | Icarus Verilog       |
+
+---
+
+## 🛠 **Installation Steps**
+Follow these steps to install all required tools and set up the RTL-to-GDS flow.
+
+### 1️⃣ **Clone the Repository**
+```sh
+git clone https://github.com/YOUR_USERNAME/Silicon_Craft_RTL2GDS.git
+cd Silicon_Craft_RTL2GDS
 ```
 
 ### **Step 2: Grant Execution Permission**
@@ -47,6 +63,18 @@ This repository provides an automated installation script for open-source EDA to
 - **CVC** - Verilog compiler
 - **OR-Tools** - Optimization library
 - **CUDD** - Binary decision diagrams (BDD) library
+
+## Folder Structure
+Silicon_Craft_RTL2GDS/
+│── designs/            # User RTL Designs
+│── scripts/            # Automation scripts
+│── pdks/               # Process Design Kits
+│── tools/              # Installed EDA Tools
+│── results/            # Output GDSII files
+│── docs/               # Documentation
+│── install_eda_tools.sh  # Installation script
+│── run_flow.sh         # RTL-to-GDS automation
+│── README.md           # Project documentation
 
 ## Verification
 After installation, verify the tools by running:
