@@ -66,15 +66,15 @@ cd Silicon_Craft_RTL2GDS
 
 ## Folder Structure
 Silicon_Craft_RTL2GDS/
-│── designs/            # User RTL Designs
-│── scripts/            # Automation scripts
-│── pdks/               # Process Design Kits
-│── tools/              # Installed EDA Tools
-│── results/            # Output GDSII files
-│── docs/               # Documentation
-│── install_eda_tools.sh  # Installation script
-│── run_flow.sh         # RTL-to-GDS automation
-│── README.md           # Project documentation
+- │── designs/            # User RTL Designs
+- │── scripts/            # Automation scripts
+- │── pdks/               # Process Design Kits
+- │── tools/              # Installed EDA Tools
+- │── results/            # Output GDSII files
+- │── docs/               # Documentation
+- │── install_eda_tools.sh  # Installation script
+- │── run_flow.sh         # RTL-to-GDS automation
+- │── README.md           # Project documentation
 
 ## Verification
 After installation, verify the tools by running:
