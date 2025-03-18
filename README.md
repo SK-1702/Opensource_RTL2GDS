@@ -31,23 +31,23 @@ Follow these steps to install all required tools and set up the RTL-to-GDS flow.
 
 ### 1️⃣ **Clone the Repository**
 ```sh
-git clone https://github.com/YOUR_USERNAME/Silicon_Craft_RTL2GDS.git
-cd Silicon_Craft_RTL2GDS
+git clone https://github.com/SK-1702/Opensource_RTL2GDS.git
+cd Opensource_RTL2GDS
 ```
 
 ### **Step 2: Grant Execution Permission**
 ```
- chmod +x install_eda_tools.sh
+ chmod +x Silicon_Craft_VLSI_EDA_Tools.sh
 ```
 
 ### **Step 3: Run the Installation Script**
 #### **For Linux and WSL**
 ```
- ./install_eda_tools.sh
+ ./Silicon_Craft_VLSI_EDA_Tools.sh
 ```
 #### **For MacOS**
 ```
- ./install_eda_tools.sh
+ ./Silicon_Craft_VLSI_EDA_Tools.sh
 ```
 
 ## Tools Installed
