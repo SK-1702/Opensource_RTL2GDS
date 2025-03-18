@@ -73,6 +73,11 @@ git_clone_build_install() {
     git clone "$REPO"
     cd "$DIR_NAME"
 
+  # Initialize submodules if present
+    if [[ -f ".gitmodules" ]]; then
+        git submodule update --init --recursive
+    fi
+
     # Check if CMakeLists.txt or Makefile exists
     if [[ -f "CMakeLists.txt" ]]; then
         mkdir -p build && cd build
