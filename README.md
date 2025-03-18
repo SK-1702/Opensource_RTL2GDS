@@ -37,7 +37,7 @@ cd Opensource_RTL2GDS
 
 ### **Step 2: Grant Execution Permission**
 ```
- chmod +x Silicon_Craft_VLSI_EDA_Tools.sh
+ chmod 777 Silicon_Craft_VLSI_EDA_Tools.sh
 ```
 
 ### **Step 3: Run the Installation Script**
