@@ -37,10 +37,13 @@ if [[ "$OS_TYPE" == "Linux" || "$OS_TYPE" == "WSL" ]]; then
                         python3-pyqt5 python3-pyqt5.qtsvg python3-pyqt5.qtwebkit \
                         python3-pyqt5.qtserialport python3-lxml python3-yaml \
                         x11-apps xauth
+
+    # Configure GUI for WSL
     if [[ "$OS_TYPE" == "WSL" ]]; then
         echo "Setting up X11 forwarding for GUI applications in WSL..."
         echo "export DISPLAY=:0" >> ~/.bashrc
         source ~/.bashrc
+        sudo apt install -y x11-apps xauth
     fi
 elif [[ "$OS_TYPE" == "MacOS" ]]; then
     echo "Installing dependencies using Homebrew..."
@@ -56,11 +59,26 @@ git_clone_build_install() {
     echo "Installing $DIR_NAME..."
     git clone "$REPO"
     cd "$DIR_NAME"
-    mkdir -p build && cd build
-    cmake ..
-    make -j$(sysctl -n hw.ncpu 2>/dev/null || nproc)
-    sudo make install
-    cd ../..
+    
+    # Check if CMakeLists.txt exists
+    if [[ -f "CMakeLists.txt" ]]; then
+        mkdir -p build && cd build
+        cmake ..
+        make -j$(nproc)
+        sudo make install
+        cd ../..
+    elif [[ -f "Makefile" || -f "configure" ]]; then
+        # Use make directly if Makefile/configure exists
+        if [[ -f "configure" ]]; then
+            ./configure
+        fi
+        make -j$(nproc)
+        sudo make install
+        cd ..
+    else
+        echo "Error: No CMakeLists.txt or Makefile found in $DIR_NAME. Skipping..."
+        cd ..
+    fi
 }
 
 # Install Open-Source EDA Tools
@@ -106,6 +124,13 @@ klayout -v
 opentimer --version
 opensta -version
 iverilog -V
+
+# Launch GUI for KLayout and Magic
+if [[ "$OS_TYPE" == "Linux" || "$OS_TYPE" == "WSL" || "$OS_TYPE" == "MacOS" ]]; then
+    echo "Launching KLayout and Magic for GUI verification..."
+    klayout &
+    magic -d XR &
+fi
 
 echo "All tools installed successfully on $OS_TYPE!"
 
