@@ -52,15 +52,28 @@ elif [[ "$OS_TYPE" == "MacOS" ]]; then
     echo "Ensure XQuartz is installed and running for GUI applications."
 fi
 
-# Function to install tools
+# Function to install tools with checks
 git_clone_build_install() {
     REPO=$1
     DIR_NAME=$(basename "$REPO" .git)
+
+    # Check if directory already exists
+    if [[ -d "$DIR_NAME" ]]; then
+        echo "$DIR_NAME already exists. Checking installation..."
+        if command -v "$DIR_NAME" &> /dev/null; then
+            echo "$DIR_NAME is already installed. Skipping..."
+            return
+        else
+            echo "$DIR_NAME directory exists but installation not found. Removing and reinstalling..."
+            sudo rm -rf "$DIR_NAME"
+        fi
+    fi
+
     echo "Installing $DIR_NAME..."
     git clone "$REPO"
     cd "$DIR_NAME"
-    
-    # Check if CMakeLists.txt exists
+
+    # Check if CMakeLists.txt or Makefile exists
     if [[ -f "CMakeLists.txt" ]]; then
         mkdir -p build && cd build
         cmake ..
@@ -68,7 +81,6 @@ git_clone_build_install() {
         sudo make install
         cd ../..
     elif [[ -f "Makefile" || -f "configure" ]]; then
-        # Use make directly if Makefile/configure exists
         if [[ -f "configure" ]]; then
             ./configure
         fi
