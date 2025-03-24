@@ -36,7 +36,7 @@ if [[ "$OS_TYPE" == "Linux" || "$OS_TYPE" == "WSL" ]]; then
                         swig libfftw3-dev python3-gi-cairo python3-scipy python3-matplotlib \
                         python3-pyqt5 python3-pyqt5.qtsvg python3-pyqt5.qtwebkit \
                         python3-pyqt5.qtserialport python3-lxml python3-yaml \
-                        x11-apps xauth
+                        x11-apps xauth libgtest-dev
 
     # Configure GUI for WSL
     if [[ "$OS_TYPE" == "WSL" ]]; then
@@ -52,7 +52,24 @@ elif [[ "$OS_TYPE" == "MacOS" ]]; then
     echo "Ensure XQuartz is installed and running for GUI applications."
 fi
 
+# -------------------------------------------------------------
+# Install Google Test (GTest) - Required for OpenROAD Build
+# -------------------------------------------------------------
+echo "Installing Google Test (GTest)..."
+
+if [[ ! -f /usr/lib/libgtest.a ]]; then
+    echo "GTest not found. Building and installing..."
+    cd /usr/src/gtest
+    sudo cmake CMakeLists.txt
+    sudo make -j$(nproc)
+    sudo cp lib/*.a /usr/lib
+else
+    echo "GTest is already installed."
+fi
+
+# -------------------------------------------------------------
 # Function to install tools with checks
+# -------------------------------------------------------------
 git_clone_build_install() {
     REPO=$1
     DIR_NAME=$(basename "$REPO" .git)
@@ -73,7 +90,7 @@ git_clone_build_install() {
     git clone "$REPO"
     cd "$DIR_NAME"
 
-  # Initialize submodules if present
+    # Initialize submodules if present
     if [[ -f ".gitmodules" ]]; then
         git submodule update --init --recursive
     fi
@@ -98,7 +115,9 @@ git_clone_build_install() {
     fi
 }
 
+# -------------------------------------------------------------
 # Install Open-Source EDA Tools
+# -------------------------------------------------------------
 git_clone_build_install "https://github.com/YosysHQ/yosys.git"
 git_clone_build_install "https://github.com/The-OpenROAD-Project/OpenROAD.git"
 git_clone_build_install "https://github.com/RTimothyEdwards/magic.git"
@@ -112,7 +131,9 @@ git_clone_build_install "https://github.com/d-m-bailey/cvc.git"
 git_clone_build_install "https://github.com/google/or-tools.git"
 git_clone_build_install "https://github.com/ivmai/cudd.git"
 
+# -------------------------------------------------------------
 # Install KLayout (Special case for Linux and MacOS)
+# -------------------------------------------------------------
 if [[ "$OS_TYPE" == "Linux" || "$OS_TYPE" == "WSL" ]]; then
     echo "Installing KLayout..."
     wget https://www.klayout.org/downloads/Ubuntu-22/klayout_0.28.7-1_amd64.deb
@@ -124,13 +145,17 @@ elif [[ "$OS_TYPE" == "MacOS" ]]; then
     brew install klayout
 fi
 
+# -------------------------------------------------------------
 # Ensure user is in the sudoers file
+# -------------------------------------------------------------
 if [[ "$OS_TYPE" != "MacOS" ]]; then
     echo "Ensuring user is in the sudoers file..."
     sudo usermod -aG sudo $USER
 fi
 
+# -------------------------------------------------------------
 # Verify installations
+# -------------------------------------------------------------
 echo "Verifying installations..."
 yosys -V
 openroad -version
@@ -142,7 +167,9 @@ opentimer --version
 opensta -version
 iverilog -V
 
+# -------------------------------------------------------------
 # Launch GUI for KLayout and Magic
+# -------------------------------------------------------------
 if [[ "$OS_TYPE" == "Linux" || "$OS_TYPE" == "WSL" || "$OS_TYPE" == "MacOS" ]]; then
     echo "Launching KLayout and Magic for GUI verification..."
     klayout &
